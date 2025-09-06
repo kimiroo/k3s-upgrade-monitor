@@ -33,7 +33,7 @@ def send_ntfy_notification(title, message, priority="default"):
             headers={
                 'Title': f'{TITLE_PREFIX} - {title}',
                 'Priority': priority,
-                'Content-Type': 'text/markdown; charset=utf-8'
+                'Content-Type': 'text/plain; charset=utf-8'
             },
             timeout=10
         )
@@ -99,11 +99,11 @@ def handle_job_event(event, job):
             job_states[job_uid] = 'running'
             k3s_version = get_k3s_version_from_node(node_name)
 
-            message = f"""🚀 **{node_type} Upgrade Started**
-📍 **Node:** {node_name}
-📊 **Current Version:** {k3s_version}
-📋 **Plan:** {plan_name}
-⏰ **Started:** {current_time}"""
+            message = f"""🚀 {node_type} Upgrade Started
+📍 Node: {node_name}
+📊 Current Version: {k3s_version}
+📋 Plan: {plan_name}
+⏰ Started: {current_time}"""
 
             send_ntfy_notification(f"{node_type} Upgrade Started", message)
             print(f"Job started: {job_name} on {node_name}")
@@ -117,13 +117,13 @@ def handle_job_event(event, job):
             duration = ""
             if job.status.completion_time and job.status.start_time:
                 delta = job.status.completion_time - job.status.start_time
-                duration = f"\n    ⚡ **Duration:** {int(delta.total_seconds())}s"
+                duration = f"\n    ⚡ Duration: {int(delta.total_seconds())}s"
 
-            message = f"""✅ **{node_type} Upgrade Completed**
-📍 **Node:** {node_name}
-🎉 **New Version:** {k3s_version}
-📋 **Plan:** {plan_name}
-⏰ **Completed:** {current_time}{duration}"""
+            message = f"""✅ {node_type} Upgrade Completed
+📍 Node: {node_name}
+🎉 New Version: {k3s_version}
+📋 Plan: {plan_name}
+⏰ Completed: {current_time}{duration}"""
 
             send_ntfy_notification(f"{node_type} Upgrade Completed", message)
             print(f"Job completed: {job_name} on {node_name}")
@@ -133,12 +133,12 @@ def handle_job_event(event, job):
             job_states[job_uid] = 'failed'
             k3s_version = get_k3s_version_from_node(node_name)
 
-            message = f"""❌ **{node_type} Upgrade Failed**
-📍 **Node:** {node_name}
-📊 **Version:** {k3s_version}
-📋 **Plan:** {plan_name}
-⏰ **Failed:** {current_time}
-🔍 **Action:** Check logs with `kubectl logs -n system-upgrade {job_name}`"""
+            message = f"""❌ {node_type} Upgrade Failed
+📍 Node: {node_name}
+📊 Version: {k3s_version}
+📋 Plan: {plan_name}
+⏰ Failed: {current_time}
+🔍 Action: Check logs with `kubectl logs -n system-upgrade {job_name}`"""
 
             send_ntfy_notification(f"{node_type} Upgrade Failed", message, priority="high")
             print(f"Job failed: {job_name} on {node_name}")
