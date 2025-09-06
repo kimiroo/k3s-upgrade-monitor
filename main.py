@@ -33,7 +33,7 @@ def send_ntfy_notification(title, message, priority="default"):
             headers={
                 'Title': f'{TITLE_PREFIX} - {title}',
                 'Priority': priority,
-                'Content-Type': 'text/plain; charset=utf-8'
+                'Content-Type': 'text/markdown; charset=utf-8'
             },
             timeout=10
         )
