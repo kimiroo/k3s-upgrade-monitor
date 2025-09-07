@@ -178,4 +178,10 @@ def main():
         time.sleep(10)  # Wait before restart
 
 if __name__ == "__main__":
-    main()
+    while True:
+        try:
+            main()
+        except Exception as e:
+            print(f"Main loop terminated with error: {e}")
+            print("Restarting in 10 seconds...")
+            time.sleep(10)
